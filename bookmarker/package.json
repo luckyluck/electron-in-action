@@ -4,11 +4,15 @@
   "description": "bookmark list using electron",
   "main": "./app/main.js",
   "scripts": {
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "electron"
   ],
   "author": "Alexandr Ketov",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^15.3.0"
+  }
 }
