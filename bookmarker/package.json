@@ -1,0 +1,14 @@
+{
+  "name": "bookmarker",
+  "version": "1.0.0",
+  "description": "bookmark list using electron",
+  "main": "./app/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "Alexandr Ketov",
+  "license": "ISC"
+}
