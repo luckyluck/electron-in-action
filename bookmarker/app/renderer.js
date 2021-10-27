@@ -27,6 +27,17 @@ const convertToElement = link => `
 const renderLinks = () => {
   linksSection.innerHTML = getLinks().map(convertToElement).join('');
 };
+const handleError = url => error => {
+  errorMessage.innerHTML = `
+    There was an issue adding "${url}": ${error.message}
+  `.trim();
+
+  setTimeout(() => errorMessage.innerHTML = '', 5000);
+};
+const validateResponse = response => {
+  if (response.ok) return response;
+  throw new Error(`Status code of ${response.status} ${response.statusText}`);
+};
 
 // Initial render
 renderLinks();
@@ -41,12 +52,14 @@ newLinkForm.addEventListener('submit', (e) => {
   const url = newLinkUrl.value;
 
   fetch(url)
+    .then(validateResponse)
     .then(response => response.text())
     .then(parseResponse)
     .then(findTitle)
     .then(storeLink(url))
     .then(clearForm)
-    .then(renderLinks);
+    .then(renderLinks)
+    .catch(handleError(url));
 });
 
 clearStorageButton.addEventListener('click', () => {
