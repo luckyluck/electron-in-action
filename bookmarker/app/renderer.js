@@ -15,6 +15,21 @@ const clearForm = () => {
 const storeLink = url => title => {
   localStorage.setItem(url, JSON.stringify({ title, url }));
 };
+const getLinks = () =>
+  Object.keys(localStorage)
+    .map(key => JSON.parse(localStorage.getItem(key)));
+const convertToElement = link => `
+  <div class="link">
+    <h3>${link.title}</h3>
+    <p><a href="${link.url}" target="_blank">${link.url}</a></p>
+  </div>
+`;
+const renderLinks = () => {
+  linksSection.innerHTML = getLinks().map(convertToElement).join('');
+};
+
+// Initial render
+renderLinks();
 
 newLinkUrl.addEventListener('keyup', () => {
   newLinkSubmit.disabled = !newLinkUrl.validity.valid;
@@ -30,5 +45,6 @@ newLinkForm.addEventListener('submit', (e) => {
     .then(parseResponse)
     .then(findTitle)
     .then(storeLink(url))
-    .then(clearForm);
+    .then(clearForm)
+    .then(renderLinks);
 });
