@@ -48,3 +48,8 @@ newLinkForm.addEventListener('submit', (e) => {
     .then(clearForm)
     .then(renderLinks);
 });
+
+clearStorageButton.addEventListener('click', () => {
+  localStorage.clear();
+  linksSection.innerHTML = '';
+});
