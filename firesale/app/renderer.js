@@ -1,4 +1,5 @@
 const marked = require('marked');
+const createDOMPurify = require('dompurify');
 
 const markdownView = document.querySelector('#markdown');
 const htmlView = document.querySelector('#html');
@@ -10,8 +11,10 @@ const saveHtmlButton = document.querySelector('#save-html');
 const showFileButton = document.querySelector('#show-file');
 const openInDefaultButton = document.querySelector('#open-in-default');
 
+const DOMPurity = createDOMPurify();
+
 const renderMarkdownToHtml = markdown => {
-  htmlView.innerHTML = marked(markdown, { sanitize: true });
+  htmlView.innerHTML = marked(markdown, { sanitizer: DOMPurity.sanitize });
 };
 
 markdownView.addEventListener('keyup', e => {
