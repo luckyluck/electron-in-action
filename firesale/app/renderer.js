@@ -1,3 +1,4 @@
+const { ipcRenderer } = require('electron');
 const marked = require('marked');
 const createDOMPurify = require('dompurify');
 
@@ -19,4 +20,11 @@ const renderMarkdownToHtml = markdown => {
 
 markdownView.addEventListener('keyup', e => {
   renderMarkdownToHtml(e.target.value);
+});
+
+openFileButton.addEventListener('click', () => {
+  ipcRenderer.invoke('open-file').then(({ file, content }) => {
+    markdownView.value = content;
+    renderMarkdownToHtml(content);
+  });
 });
