@@ -22,6 +22,10 @@ markdownView.addEventListener('keyup', e => {
   renderMarkdownToHtml(e.target.value);
 });
 
+newFileButton.addEventListener('click', () => {
+  ipcRenderer.send('new-file');
+});
+
 openFileButton.addEventListener('click', () => {
   ipcRenderer.invoke('open-file').then(({ file, content }) => {
     markdownView.value = content;
