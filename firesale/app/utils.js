@@ -1,5 +1,6 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const fs = require('fs');
+const path = require('path');
 
 const windows = new Set();
 
@@ -65,8 +66,34 @@ const getFileFromUser = async targetWindow => {
   openFile(targetWindow, filePaths[0]);
 };
 
+const saveHtml = async (targetWindow, content) => {
+  const { canceled, filePath } = await dialog.showSaveDialog(targetWindow, {
+    title: 'Save HTML',
+    defaultPath: app.getPath('documents'),
+    filters: [{
+      name: 'HTML Files', extensions: ['html', 'htm'],
+    }],
+  });
+
+  if (canceled) return;
+
+  const validHTML = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>${path.basename(filePath)}</title>
+    </head>
+    <body>
+        ${content}
+    </body>
+    </html>`;
+
+  fs.writeFileSync(filePath, validHTML);
+};
+
 module.exports = {
   createWindow,
   getFileFromUser,
   openFile,
+  saveHtml,
 }

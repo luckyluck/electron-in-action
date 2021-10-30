@@ -51,6 +51,10 @@ openFileButton.addEventListener('click', () => {
   ipcRenderer.send('open-file');
 });
 
+saveHtmlButton.addEventListener('click', () => {
+  ipcRenderer.send('save-html', htmlView.innerHTML);
+});
+
 ipcRenderer.on('file-opened', (_, file, content) => {
   filePath = file;
   originalContent = content;

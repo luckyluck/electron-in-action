@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
-const { createWindow, getFileFromUser,openFile } = require('./utils');
+const { createWindow, getFileFromUser,openFile, saveHtml } = require('./utils');
 
 app.on('ready', () => {
   createWindow();
@@ -16,6 +16,10 @@ app.on('ready', () => {
   ipcMain.on('file-update', (_, title, isEdited) => {
     BrowserWindow.getFocusedWindow().setTitle(title);
     BrowserWindow.getFocusedWindow().setDocumentEdited(isEdited);
+  });
+
+  ipcMain.on('save-html', (_, content) => {
+    saveHtml(BrowserWindow.getFocusedWindow(), content);
   });
 });
 
