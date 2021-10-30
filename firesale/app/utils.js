@@ -43,6 +43,14 @@ const createWindow = () => {
   return newWindow;
 };
 
+const openFile = (targetWindow, file) => {
+  const content = fs.readFileSync(file).toString();
+
+  targetWindow.setRepresentedFilename(file);
+
+  return { file, content };
+};
+
 const getFileFromUser = async targetWindow => {
   const { canceled, filePaths } = await dialog.showOpenDialog(targetWindow, {
     properties: ['openFile'],
@@ -55,9 +63,8 @@ const getFileFromUser = async targetWindow => {
   if (canceled) return;
 
   const file = filePaths[0];
-  const content = fs.readFileSync(file).toString();
 
-  return { file, content };
+  return openFile(targetWindow, file);
 };
 
 module.exports = {
