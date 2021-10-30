@@ -48,13 +48,15 @@ newFileButton.addEventListener('click', () => {
 });
 
 openFileButton.addEventListener('click', () => {
-  ipcRenderer.invoke('open-file').then(({ file, content }) => {
-    filePath = file;
-    originalContent = content;
+  ipcRenderer.send('open-file');
+});
 
-    markdownView.value = content;
-    renderMarkdownToHtml(content);
+ipcRenderer.on('file-opened', (_, file, content) => {
+  filePath = file;
+  originalContent = content;
 
-    updateUserInterface();
-  });
+  markdownView.value = content;
+  renderMarkdownToHtml(content);
+
+  updateUserInterface();
 });

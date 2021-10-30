@@ -1,4 +1,4 @@
-const { BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const fs = require('fs');
 
 const windows = new Set();
@@ -46,9 +46,9 @@ const createWindow = () => {
 const openFile = (targetWindow, file) => {
   const content = fs.readFileSync(file).toString();
 
+  app.addRecentDocument(file);
   targetWindow.setRepresentedFilename(file);
-
-  return { file, content };
+  targetWindow.webContents.send('file-opened', file, content);
 };
 
 const getFileFromUser = async targetWindow => {
@@ -62,12 +62,11 @@ const getFileFromUser = async targetWindow => {
 
   if (canceled) return;
 
-  const file = filePaths[0];
-
-  return openFile(targetWindow, file);
+  openFile(targetWindow, filePaths[0]);
 };
 
 module.exports = {
   createWindow,
   getFileFromUser,
+  openFile,
 }

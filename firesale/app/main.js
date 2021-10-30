@@ -1,12 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
-const { createWindow, getFileFromUser } = require('./utils');
+const { createWindow, getFileFromUser,openFile } = require('./utils');
 
 app.on('ready', () => {
   createWindow();
 
-  ipcMain.handle('open-file', async () => {
-    return getFileFromUser(BrowserWindow.getFocusedWindow());
+  ipcMain.on('open-file', () => {
+    getFileFromUser(BrowserWindow.getFocusedWindow());
   });
 
   ipcMain.on('new-file', () => {
@@ -31,4 +31,14 @@ app.on('window-all-closed', () => {
   }
 
   app.quit();
+});
+
+app.on('will-finish-launching', () => {
+  app.on('open-file', (event, file) => {
+    const win = createWindow();
+
+    win.once('ready-to-show', () => {
+      openFile(win, file);
+    });
+  });
 });
