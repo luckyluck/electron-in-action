@@ -91,9 +91,29 @@ const saveHtml = async (targetWindow, content) => {
   fs.writeFileSync(filePath, validHTML);
 };
 
+const saveMarkdown = async (targetWindow, file, content) => {
+  if (!file) {
+    const { canceled, filePath } = await dialog.showSaveDialog(targetWindow, {
+      title: 'Save Markdown',
+      defaultPath: app.getPath('documents'),
+      filters: [{
+        name: 'Markdown Files', extensions: ['md', 'markdown'],
+      }],
+    });
+
+    if (canceled) return;
+
+    file = filePath;
+  }
+
+  fs.writeFileSync(file, content);
+  openFile(targetWindow, file);
+};
+
 module.exports = {
   createWindow,
   getFileFromUser,
   openFile,
   saveHtml,
+  saveMarkdown,
 }

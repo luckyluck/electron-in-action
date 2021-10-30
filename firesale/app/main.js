@@ -1,6 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 
-const { createWindow, getFileFromUser,openFile, saveHtml } = require('./utils');
+const {
+  createWindow,
+  getFileFromUser,
+  openFile,
+  saveHtml,
+  saveMarkdown,
+} = require('./utils');
 
 app.on('ready', () => {
   createWindow();
@@ -20,6 +26,10 @@ app.on('ready', () => {
 
   ipcMain.on('save-html', (_, content) => {
     saveHtml(BrowserWindow.getFocusedWindow(), content);
+  });
+
+  ipcMain.on('save-markdown', (_, file, content) => {
+    saveMarkdown(BrowserWindow.getFocusedWindow(), file, content);
   });
 });
 
