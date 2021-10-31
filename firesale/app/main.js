@@ -6,22 +6,34 @@ const {
   openFile,
   saveHtml,
   saveMarkdown,
+  getWindowById,
 } = require('./utils');
 
 app.on('ready', () => {
   createWindow();
 
-  ipcMain.on('open-file', () => {
-    getFileFromUser(BrowserWindow.getFocusedWindow());
+  ipcMain.on('open-file', (e, filePath) => {
+    // Sending path on drag-n-drop
+    if (filePath) {
+      openFile(
+        BrowserWindow.getFocusedWindow() ?? getWindowById(e.sender.id),
+        filePath
+      );
+    } else {
+      getFileFromUser(BrowserWindow.getFocusedWindow());
+    }
   });
 
   ipcMain.on('new-file', () => {
     createWindow();
   });
 
-  ipcMain.on('file-update', (_, title, isEdited) => {
-    BrowserWindow.getFocusedWindow().setTitle(title);
-    BrowserWindow.getFocusedWindow().setDocumentEdited(isEdited);
+  ipcMain.on('file-update', (e, title, isEdited) => {
+    // Somehow in the case of drag-n-drop current window loses focus
+    // And we have to iterate the list of all windows to find channel-caller
+    const activeWindow = BrowserWindow.getFocusedWindow() ?? getWindowById(e.sender.id);
+    activeWindow.setTitle(title);
+    activeWindow.setDocumentEdited(isEdited);
   });
 
   ipcMain.on('save-html', (_, content) => {

@@ -110,10 +110,14 @@ const saveMarkdown = async (targetWindow, file, content) => {
   openFile(targetWindow, file);
 };
 
+const getWindowById = id =>
+  BrowserWindow.getAllWindows().find(window => window.id === id);
+
 module.exports = {
   createWindow,
   getFileFromUser,
   openFile,
   saveHtml,
   saveMarkdown,
+  getWindowById,
 }
