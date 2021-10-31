@@ -44,6 +44,16 @@ const getDroppedFile = e => e.dataTransfer.files[0];
 const fileTypeIsSupported = file =>
   ['text/plain', 'text/markdown'].includes(file.type);
 
+const renderFile = (file, content) => {
+  filePath = file;
+  originalContent = content;
+
+  markdownView.value = content;
+  renderMarkdownToHtml(content);
+
+  updateUserInterface();
+};
+
 // Disabling default behaviour on drag-n-drop
 document.addEventListener('dragstart', e => e.preventDefault());
 document.addEventListener('dragover', e => e.preventDefault());
@@ -102,12 +112,10 @@ revertButton.addEventListener('click', () => {
   updateUserInterface(false);
 });
 
-ipcRenderer.on('file-opened', (_, file, content) => {
-  filePath = file;
-  originalContent = content;
+ipcRenderer.on('file-opened', async (_, file, content) => {
+  renderFile(file, content);
+});
 
-  markdownView.value = content;
-  renderMarkdownToHtml(content);
-
-  updateUserInterface();
+ipcRenderer.on('file-changed', async (_, file, content) => {
+  renderFile(file, content);
 });

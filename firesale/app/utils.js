@@ -36,9 +36,22 @@ const createWindow = () => {
     newWindow.show();
   });
 
-  newWindow.on('close', () => {
+  newWindow.on('close', async e => {
     if (newWindow.isDocumentEdited()) {
-      // ...
+      e.preventDefault();
+
+      const { response } = await dialog.showMessageBox(newWindow, {
+        type: 'warning',
+        title: 'Quit with Unsaved Changes?',
+        message: 'Your changes will be lost if you do not save.',
+        buttons: ['Quit Anyway', 'Cancel'],
+        defaultId: 0,
+        cancelId: 1,
+      });
+
+      if (response === 0) {
+        newWindow.destroy();
+      }
     }
   });
 
@@ -52,7 +65,20 @@ const createWindow = () => {
   return newWindow;
 };
 
-const openFile = (targetWindow, file) => {
+const openFile = async (targetWindow, file) => {
+  if (targetWindow.isDocumentEdited()) {
+    const { response } = await dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+      type: 'warning',
+      title: 'Overwrite Current Unsaved Changes?',
+      message: 'Opening a new file in this window will overwrite your unsaved changes. Open this file anyway?',
+      buttons: ['Yes', 'Cancel'],
+      defaultId: 0,
+      cancelId: 1,
+    });
+
+    if (response) return;
+  }
+
   const content = fs.readFileSync(file).toString();
 
   startWatchingFile(targetWindow, file);
@@ -125,7 +151,7 @@ const getWindowById = id =>
 
 const stopWatchingFile = targetWindow => {
   if (openFiles.has(targetWindow)) {
-    openFiles.get(targetWindow).stop();
+    openFiles.get(targetWindow).close();
     openFiles.delete(targetWindow);
   }
 };
@@ -136,7 +162,7 @@ const startWatchingFile = (targetWindow, file) => {
   const watcher = fs.watch(file, event => {
     if (event === 'change') {
       const content = fs.readFileSync(file).toString();
-      targetWindow.webContents.send('file-opened', file, content);
+      targetWindow.webContents.send('file-changed', file, content);
     }
   });
 
