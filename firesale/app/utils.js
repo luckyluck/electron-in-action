@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const windows = new Set();
+const openFiles = new Map();
 
 const getNewWindowPosition = () => {
   const currentWindow = BrowserWindow.getFocusedWindow();
@@ -36,7 +37,14 @@ const createWindow = () => {
   });
 
   newWindow.on('close', () => {
+    if (newWindow.isDocumentEdited()) {
+      // ...
+    }
+  });
+
+  newWindow.on('closed', () => {
     windows.delete(newWindow);
+    stopWatchingFile(newWindow);
     newWindow = null;
   });
 
@@ -46,6 +54,8 @@ const createWindow = () => {
 
 const openFile = (targetWindow, file) => {
   const content = fs.readFileSync(file).toString();
+
+  startWatchingFile(targetWindow, file);
 
   app.addRecentDocument(file);
   targetWindow.setRepresentedFilename(file);
@@ -113,6 +123,26 @@ const saveMarkdown = async (targetWindow, file, content) => {
 const getWindowById = id =>
   BrowserWindow.getAllWindows().find(window => window.id === id);
 
+const stopWatchingFile = targetWindow => {
+  if (openFiles.has(targetWindow)) {
+    openFiles.get(targetWindow).stop();
+    openFiles.delete(targetWindow);
+  }
+};
+
+const startWatchingFile = (targetWindow, file) => {
+  stopWatchingFile(targetWindow);
+
+  const watcher = fs.watch(file, event => {
+    if (event === 'change') {
+      const content = fs.readFileSync(file).toString();
+      targetWindow.webContents.send('file-opened', file, content);
+    }
+  });
+
+  openFiles.set(targetWindow, watcher);
+};
+
 module.exports = {
   createWindow,
   getFileFromUser,
@@ -120,4 +150,5 @@ module.exports = {
   saveHtml,
   saveMarkdown,
   getWindowById,
+  startWatchingFile,
 }
