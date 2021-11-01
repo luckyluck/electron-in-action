@@ -89,6 +89,10 @@ markdownView.addEventListener('drop', e => {
   markdownView.classList.remove('drag-over');
   markdownView.classList.remove('drag-error');
 });
+markdownView.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  ipcRenderer.send('show-context-menu');
+});
 
 newFileButton.addEventListener('click', () => {
   ipcRenderer.send('new-file');

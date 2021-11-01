@@ -40,6 +40,22 @@ app.on('ready', () => {
   ipcMain.on('save-markdown', (_, file, content) => {
     saveMarkdown(BrowserWindow.getFocusedWindow(), file, content);
   });
+
+  ipcMain.on('show-context-menu', e => {
+    const markdownContextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Open File',
+        click() { getFileFromUser(BrowserWindow.fromWebContents(e.sender)); },
+      },
+      { type: 'separator' },
+      { label: 'Cut', role: 'cut' },
+      { label: 'Copy', role: 'copy' },
+      { label: 'Paste', role: 'paste' },
+      { label: 'Select All', role: 'selectall' },
+    ]);
+
+    markdownContextMenu.popup();
+  });
 });
 
 app.on('activate', (_, hasVisibleWindows) => {
