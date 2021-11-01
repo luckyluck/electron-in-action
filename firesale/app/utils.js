@@ -146,9 +146,6 @@ const saveMarkdown = async (targetWindow, file, content) => {
   openFile(targetWindow, file);
 };
 
-const getWindowById = id =>
-  BrowserWindow.getAllWindows().find(window => window.id === id);
-
 const stopWatchingFile = targetWindow => {
   if (openFiles.has(targetWindow)) {
     openFiles.get(targetWindow).close();
@@ -175,6 +172,5 @@ module.exports = {
   openFile,
   saveHtml,
   saveMarkdown,
-  getWindowById,
   startWatchingFile,
 }
