@@ -1,5 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const {
   createWindow,
   getFileFromUser,
@@ -8,8 +7,10 @@ const {
   saveMarkdown,
   getWindowById,
 } = require('./utils');
+const applicationMenu = require('./application-menu');
 
 app.on('ready', () => {
+  Menu.setApplicationMenu(applicationMenu);
   createWindow();
 
   ipcMain.on('open-file', (e, filePath) => {
