@@ -119,3 +119,11 @@ ipcRenderer.on('file-opened', async (_, file, content) => {
 ipcRenderer.on('file-changed', async (_, file, content) => {
   renderFile(file, content);
 });
+
+ipcRenderer.on('save-markdown', () => {
+  ipcRenderer.send('save-markdown', filePath, markdownView.value);
+});
+
+ipcRenderer.on('save-html', () => {
+  ipcRenderer.send('save-html', htmlView.innerHTML);
+});

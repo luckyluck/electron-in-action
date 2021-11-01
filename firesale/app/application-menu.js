@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Menu, shell } = require('electron');
+const { app, dialog, Menu } = require('electron');
+const { createWindow, getFileFromUser } = require('./utils');
 
 const macOSAppMenu = [{
   label: app.getName(),
@@ -38,6 +39,61 @@ const macOSAppMenu = [{
 }];
 const template = [
   ...(process.platform === 'darwin' ? macOSAppMenu : []),
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'New File',
+        accelerator: 'CommandOrControl+N',
+        click() {
+          createWindow();
+        }
+      },
+      {
+        label: 'Open File',
+        accelerator: 'CommandOrControl+O',
+        click(_, focusedWindow) {
+          if (focusedWindow) {
+            return getFileFromUser(focusedWindow);
+          }
+
+          const newWindow = createWindow();
+
+          newWindow.on('show', () => {
+            getFileFromUser(newWindow);
+          });
+        }
+      },
+      {
+        label: 'Save File',
+        accelerator: 'CommandOrControl+S',
+        click(_, focusedWindow) {
+          if (!focusedWindow) {
+            return dialog.showErrorBox(
+              'Cannot Save or Export',
+              'There is currently no active document to save or export'
+            );
+          }
+
+          focusedWindow.webContents.send('save-markdown');
+        }
+      },
+      {
+        label: 'Export HTML',
+        accelerator: 'Shirt+CommandOrControl+S',
+        click(_, focusedWindow) {
+          if (!focusedWindow) {
+            return dialog.showErrorBox(
+              'Cannot Save or Export',
+              'There is currently no active document to save or export'
+            );
+          }
+
+          focusedWindow.webContents.send('save-html');
+        }
+      }
+    ],
+  },
   {
     label: 'Edit',
     submenu: [
