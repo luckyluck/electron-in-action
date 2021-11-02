@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 const marked = require('marked');
 const createDOMPurify = require('dompurify');
 const path = require('path');
@@ -51,7 +51,26 @@ const renderFile = (file, content) => {
   markdownView.value = content;
   renderMarkdownToHtml(content);
 
+  showFileButton.disabled = false;
+  openInDefaultButton.disabled = false;
+
   updateUserInterface();
+};
+
+const showFile = () => {
+  if (!filePath) {
+    return alert('This file has not been saved to the filesystem,');
+  }
+
+  shell.showItemInFolder(filePath);
+};
+
+const openInDefaultApplication = () => {
+  if (!filePath) {
+    return alert('This file has not been saved to the filesystem.');
+  }
+
+  shell.openPath(filePath);
 };
 
 // Disabling default behaviour on drag-n-drop
@@ -115,6 +134,9 @@ revertButton.addEventListener('click', () => {
   renderMarkdownToHtml(originalContent);
   updateUserInterface(false);
 });
+
+showFileButton.addEventListener('click', showFile);
+openInDefaultButton.addEventListener('click', openInDefaultApplication);
 
 ipcRenderer.on('file-opened', async (_, file, content) => {
   renderFile(file, content);
