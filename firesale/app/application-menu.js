@@ -91,7 +91,36 @@ const template = [
 
           focusedWindow.webContents.send('save-html');
         }
-      }
+      },
+      { type: 'separator' },
+      {
+        label: 'Save File',
+        accelerator: 'Shirt+CommandOrControl+S',
+        click(item, focusedWindow) {
+          if (!focusedWindow) {
+            return dialog.showErrorBox(
+              'Cannot Show File\'s Location',
+              'There is currently no active document show.'
+            );
+          }
+
+          focusedWindow.webContents.send('show-file');
+        },
+      },
+      {
+        label: 'Open in Default Editor',
+        accelerator: 'Shirt+CommandOrControl+O',
+        click(item, focusedWindow) {
+          if (!focusedWindow) {
+            return dialog.showErrorBox(
+              'Cannot Open File in Default Editor',
+              'There is currently no active document show.'
+            );
+          }
+
+          focusedWindow.webContents.send('open-in-default');
+        },
+      },
     ],
   },
   {
