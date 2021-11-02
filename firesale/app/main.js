@@ -5,6 +5,7 @@ const {
   openFile,
   saveHtml,
   saveMarkdown,
+  createContextMenu,
 } = require('./utils');
 const applicationMenu = require('./application-menu');
 
@@ -41,32 +42,8 @@ app.on('ready', () => {
     saveMarkdown(BrowserWindow.getFocusedWindow(), file, content);
   });
 
-  ipcMain.on('show-context-menu', e => {
-    const markdownContextMenu = Menu.buildFromTemplate([
-      {
-        label: 'Open File',
-        click() { getFileFromUser(BrowserWindow.fromWebContents(e.sender)); },
-      },
-      {
-        label: 'Show File in Folder',
-        click() {
-          BrowserWindow.fromWebContents(e.sender).webContents.send('show-file');
-        },
-      },
-      {
-        label: 'Open in Default Editor',
-        click() {
-          BrowserWindow.fromWebContents(e.sender).webContents.send('open-in-default');
-        },
-      },
-      { type: 'separator' },
-      { label: 'Cut', role: 'cut' },
-      { label: 'Copy', role: 'copy' },
-      { label: 'Paste', role: 'paste' },
-      { label: 'Select All', role: 'selectall' },
-    ]);
-
-    markdownContextMenu.popup();
+  ipcMain.on('show-context-menu', (e, filePath) => {
+    createContextMenu(e, filePath).popup();
   });
 });
 

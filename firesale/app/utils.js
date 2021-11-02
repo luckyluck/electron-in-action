@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, Menu } = require('electron');
 const fs = require('fs');
 const path = require('path');
 
@@ -166,11 +166,39 @@ const startWatchingFile = (targetWindow, file) => {
   openFiles.set(targetWindow, watcher);
 };
 
+const createContextMenu = (e, filePath) => {
+  return Menu.buildFromTemplate([
+    {
+      label: 'Open File',
+      click() { getFileFromUser(BrowserWindow.fromWebContents(e.sender)); },
+    },
+    {
+      label: 'Show File in Folder',
+      click() {
+        BrowserWindow.fromWebContents(e.sender).webContents.send('show-file');
+      },
+      enabled: !!filePath,
+    },
+    {
+      label: 'Open in Default Editor',
+      click() {
+        BrowserWindow.fromWebContents(e.sender).webContents.send('open-in-default');
+      },
+      enabled: !!filePath,
+    },
+    { type: 'separator' },
+    { label: 'Cut', role: 'cut' },
+    { label: 'Copy', role: 'copy' },
+    { label: 'Paste', role: 'paste' },
+    { label: 'Select All', role: 'selectall' },
+  ]);
+};
+
 module.exports = {
   createWindow,
   getFileFromUser,
   openFile,
   saveHtml,
   saveMarkdown,
-  startWatchingFile,
+  createContextMenu,
 }

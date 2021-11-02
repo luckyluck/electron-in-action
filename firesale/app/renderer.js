@@ -110,7 +110,7 @@ markdownView.addEventListener('drop', e => {
 });
 markdownView.addEventListener('contextmenu', e => {
   e.preventDefault();
-  ipcRenderer.send('show-context-menu');
+  ipcRenderer.send('show-context-menu', filePath);
 });
 
 newFileButton.addEventListener('click', () => {
