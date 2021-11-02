@@ -94,7 +94,7 @@ const template = [
       },
       { type: 'separator' },
       {
-        label: 'Save File',
+        label: 'Show File',
         accelerator: 'Shirt+CommandOrControl+S',
         click(item, focusedWindow) {
           if (!focusedWindow) {

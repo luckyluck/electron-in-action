@@ -47,6 +47,18 @@ app.on('ready', () => {
         label: 'Open File',
         click() { getFileFromUser(BrowserWindow.fromWebContents(e.sender)); },
       },
+      {
+        label: 'Show File in Folder',
+        click() {
+          BrowserWindow.fromWebContents(e.sender).webContents.send('show-file');
+        },
+      },
+      {
+        label: 'Open in Default Editor',
+        click() {
+          BrowserWindow.fromWebContents(e.sender).webContents.send('open-in-default');
+        },
+      },
       { type: 'separator' },
       { label: 'Cut', role: 'cut' },
       { label: 'Copy', role: 'copy' },
