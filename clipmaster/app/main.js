@@ -1,5 +1,6 @@
 const path = require('path');
 const { app, Menu, Tray } = require('electron');
+const { getIcon } = require('./utils');
 
 let tray = null;
 
@@ -9,7 +10,7 @@ app.whenReady().then(() => {
     app.dock.hide();
   }
 
-  tray = new Tray(path.join(__dirname, '/Icon.png'));
+  tray = new Tray(path.join(__dirname, getIcon()));
 
   // TODO might be an outdated tweak
   if (process.platform === 'win32') {
