@@ -40,6 +40,7 @@ app.whenReady().then(() => {
   }
 
   tray = new Tray(path.join(__dirname, getIcon()));
+  tray.setPressedImage(path.join(__dirname, 'icon-light.png'));
 
   // TODO might be an outdated tweak
   if (process.platform === 'win32') {
