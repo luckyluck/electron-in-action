@@ -1,6 +1,7 @@
 const { app, BrowserWindow, dialog, Menu } = require('electron');
 const fs = require('fs');
 const path = require('path');
+const createApplicationMenu = require('./application-menu');
 
 const windows = new Set();
 const openFiles = new Map();
@@ -36,6 +37,8 @@ const createWindow = () => {
     newWindow.show();
   });
 
+  newWindow.on('focus', createApplicationMenu);
+
   newWindow.on('close', async e => {
     if (newWindow.isDocumentEdited()) {
       e.preventDefault();
@@ -57,6 +60,7 @@ const createWindow = () => {
 
   newWindow.on('closed', () => {
     windows.delete(newWindow);
+    createApplicationMenu();
     stopWatchingFile(newWindow);
     newWindow = null;
   });
@@ -86,6 +90,7 @@ const openFile = async (targetWindow, file) => {
   app.addRecentDocument(file);
   targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
+  createApplicationMenu();
 };
 
 const getFileFromUser = async targetWindow => {
