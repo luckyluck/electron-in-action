@@ -1,18 +1,30 @@
 const path = require('path');
-const { app, Menu, Tray } = require('electron');
-const { getIcon } = require('./utils');
+const { app, Menu, Tray, clipboard } = require('electron');
+const { getIcon, createClippingMenu } = require('./utils');
 
 const clippings = [];
 let tray = null;
+
+const addClipping = () => {
+  const clipping = clipboard.readText();
+
+  if (clippings.includes(clipping)) return;
+
+  clippings.unshift(clipping);
+  updateMenu();
+};
 
 const updateMenu = () => {
   tray.setContextMenu(Menu.buildFromTemplate([
     {
       label: 'Create New Clipping',
-      click() { console.log('create new...'); },
+      accelerator: 'CommandOrControl+Shift+C',
+      click() { addClipping(); },
     },
     { type: 'separator' },
-    ...clippings.map(clipping => ({ label: clipping })),
+    ...clippings
+      .slice(0, 10)
+      .map((clipping, index) => createClippingMenu(clipping, index)),
     {
       label: 'Quit',
       click() { app.quit(); },
