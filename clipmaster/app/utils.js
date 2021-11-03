@@ -1,4 +1,4 @@
-const { nativeTheme, clipboard } = require('electron');
+const { nativeTheme, clipboard, Notification } = require('electron');
 
 const getIcon = () => {
   if (process.platform === 'wind32') {
@@ -18,7 +18,17 @@ const createClippingMenu = (clipping, index) => ({
   accelerator: `CommandOrControl+${index},`
 });
 
+const showNotification = clipping => {
+  if (Notification.isSupported()) {
+    new Notification({
+      title: 'Clipping Added',
+      body: clipping,
+    }).show();
+  }
+};
+
 module.exports = {
   getIcon,
   createClippingMenu,
+  showNotification,
 };

@@ -1,6 +1,6 @@
 const path = require('path');
 const { app, Menu, Tray, clipboard, globalShortcut } = require('electron');
-const { getIcon, createClippingMenu } = require('./utils');
+const { getIcon, createClippingMenu, showNotification } = require('./utils');
 
 const clippings = [];
 let tray = null;
@@ -12,6 +12,7 @@ const addClipping = () => {
 
   clippings.unshift(clipping);
   updateMenu();
+  showNotification(clipping);
 };
 
 const updateMenu = () => {
@@ -66,4 +67,5 @@ app.whenReady().then(() => {
   updateMenu();
 
   tray.setToolTip('Clipmaster');
+  app.setAppUserModelId('Clipmaster');
 });
