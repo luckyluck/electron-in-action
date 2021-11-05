@@ -13,3 +13,7 @@ updates the window’s title bar, sets a represented file on macOS, and alerts t
 ## Clipmaster
 
 Documentation can be find inside app's folder
+
+## Jetsetter
+
+A simple Electron application for keeping track of what you have—and have not—packed.

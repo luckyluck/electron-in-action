@@ -1,0 +1,39 @@
+{
+  "name": "jetsetter",
+  "version": "1.0.0",
+  "description": "An application for keeping track of the things you need to pack.",
+  "main": "app/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "dependencies": {
+    "electron": "^15.3.0",
+    "electron-prebuilt-compile": "^8.2.0",
+    "prop-types": "15.7.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-dynamic-import-node": "^2.3.3",
+    "babel-plugin-syntax-dynamic-import": "6.18.0",
+    "babel-plugin-system-import-transformer": "^4.0.0",
+    "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-es2015-classes": "6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.2",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "6.24.1",
+    "eslint": "^8.1.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "2.25.2",
+    "eslint-plugin-react": "^7.26.1",
+    "node-abi": "^3.3.0",
+    "react-hot-loader": "^4.13.0"
+  }
+}
