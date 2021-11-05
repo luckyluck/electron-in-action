@@ -1,4 +1,4 @@
-const { clipboard } = require('electron');
+const { clipboard, shell } = require('electron');
 const request = require('request').defaults({
   url: 'https://cliphub.glitch.me/clippings',
   headers: { 'User-Agent': 'Clipmaster 9000' },
@@ -47,7 +47,13 @@ const publishingClipping = clipping => {
     }
 
     const url = body.url;
-    alert(url);
+    const notification = new Notification(
+      'Your Clipping Has Been Published',
+      { body: `Click to open ${url} in your browser` }
+    );
+
+    notification.onclick = () => { shell.openExternal(url); };
+
     clipboard.writeText(url);
   });
 };
