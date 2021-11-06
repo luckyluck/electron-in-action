@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Items } from './Items';
+import { NewItem } from './NewItem';
 
 export const Application = () => {
   const [items, setItems] = useState([{ value: 'Pants', id: Date.now(), packed: false }]);
 
-  const addItem = item => {};
+  const addItem = value => {
+    const newItem = { value, id: Date.now(), packed: false };
+    setItems(oldItems => [newItem, ...oldItems]);
+  };
 
   const markAsPacked = item => {
     setItems(oldItems => oldItems.map(singleItem => ({
@@ -19,7 +23,7 @@ export const Application = () => {
 
   return (
     <div className="Application">
-      {/* TODO: <NewItem /> */}
+      <NewItem onSubmit={addItem} />
       <Items
         title="Unpacked Items"
         items={items.filter(item => !item.packed)}
