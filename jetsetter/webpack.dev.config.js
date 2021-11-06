@@ -42,6 +42,10 @@ module.exports = {
     chunks: false,
     children: false,
   },
+  externals: {
+    knex: 'commonjs knex',
+    sqlite3: 'commonjs sqlite3'
+  },
   devServer: {
     static: path.resolve(__dirname, 'dist'),
     onBeforeSetupMiddleware() {

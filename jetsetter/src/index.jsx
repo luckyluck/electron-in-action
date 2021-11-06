@@ -1,7 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { Application } from './components/Application';
 import './style.css';
+import { Application } from './components/Application';
+import { database } from './database';
 
-render(<Application />, document.getElementById('application'));
+render(
+  <Application database={database} />,
+  document.getElementById('application')
+);

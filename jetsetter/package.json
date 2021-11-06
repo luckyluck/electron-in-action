@@ -9,7 +9,8 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.build.config.js --mode production",
     "package": "yarn run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "DEBUG=eslint-plugin-import eslint src --ext .js,.jsx"
+    "lint": "DEBUG=eslint-plugin-import eslint src --ext .js,.jsx",
+    "postinstall": "electron-rebuild"
   },
   "keywords": [
     "electron"
@@ -17,8 +18,11 @@
   "dependencies": {
     "@babel/runtime": "^7.16.0",
     "electron": "^15.3.0",
+    "electron-rebuild": "^3.2.3",
+    "knex": "^0.95.13",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

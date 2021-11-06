@@ -29,6 +29,13 @@ button.full-width, .button.full-width, input[type="submit"].full-width {
   margin: 1em 0;
 }
 
+.Item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
 .NewItem {
   display: flex;
 }

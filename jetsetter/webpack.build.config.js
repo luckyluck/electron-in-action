@@ -47,4 +47,8 @@ module.exports = {
     chunks: false,
     modules: false,
   },
+  externals: {
+    knex: 'commonjs knex',
+    sqlite3: 'commonjs sqlite3'
+  },
 };
