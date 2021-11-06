@@ -31,7 +31,7 @@ const createWindow = () => {
     },
   });
 
-  newWindow.loadFile('./app/index.html');
+  newWindow.loadFile('./src/index.html');
 
   newWindow.on('ready-to-show', () => {
     newWindow.show();

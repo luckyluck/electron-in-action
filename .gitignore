@@ -7,3 +7,6 @@
 
 # WebStorm files
 .idea
+
+# Build directories
+**/dist

@@ -10,7 +10,7 @@ app.on('ready', () => {
       contextIsolation: false,
     },
   });
-  mainWindow.webContents.loadFile('./app/index.html');
+  mainWindow.webContents.loadFile('./src/index.html');
 });
 
 app.allowRendererProcessReuse = true;

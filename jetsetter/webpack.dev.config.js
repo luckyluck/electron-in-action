@@ -1,0 +1,57 @@
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { spawn } = require('child_process');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+      },
+      {
+        test: /\.jsx?$/,
+        use: [{ loader: 'babel-loader' }],
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/,
+        use: [{ loader: 'file-loader?name=img/[name]__[hash:base64:5].[ext]' }],
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        use: [
+          { loader: 'file-loader?name=font/[name]__[hash:base64:5].[ext]' },
+        ],
+      },
+    ],
+  },
+  target: 'electron-renderer',
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({ template: './public/index.html' }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
+  ],
+  devtool: 'cheap-source-map',
+  stats: {
+    colors: true,
+    chunks: false,
+    children: false,
+  },
+  devServer: {
+    static: path.resolve(__dirname, 'dist'),
+    onBeforeSetupMiddleware() {
+      spawn('electron', ['.'], {
+        shell: true,
+        env: process.env,
+        stdio: 'inherit',
+      })
+        .on('close', () => process.exit(0))
+        .on('error', (spawnError) => console.error(spawnError));
+    },
+  },
+};
